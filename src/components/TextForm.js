@@ -45,6 +45,38 @@ export default function TextForm(props) {
         //console.log("On change");
         setText(event.target.value)
     }
+
+    const handleBackTicks = ()=>{
+        let newText = '`'
+        let flag = 1
+        for(let i = 0 ; i < text.length ; i++){
+            if(text[i] !== '\n' ){
+                if(i > 0 && text[i-1] === '\n'){
+                    if(!(text[i] === ' ' || text[i] === '\t')){
+                        newText += '`'
+                        flag = 1
+                    }
+                }
+                if(!(text[i] === ' ' || text[i] === '\t')){
+                    if(!flag){
+                        newText += '`'
+                        flag = 1
+                    }
+                }
+                newText += text[i]
+            }
+            else{
+                if(!(text[i-1] === '\n' || text[i-1] === ' ')){
+                    newText += '`'
+                }
+                newText += '\n'
+                flag = 0
+            }
+        }
+        newText += '`'
+        setText(newText);
+
+    }
     const [text , setText] = useState('');
     
     // let chars = text.length;
@@ -67,6 +99,7 @@ export default function TextForm(props) {
         <button className="btn btn-primary mx-2 my-1"  onClick = {handleLoClick}>Convert to lower case</button>
         <button className="btn btn-primary mx-2 my-1"  onClick = {handleClearClick}>Clear text</button>
         <button className="btn btn-primary mx-2 my-1"  onClick = {handlePrintSelectClick}>Print Selected text</button>
+        <button className="btn btn-primary mx-2 my-1"  onClick = {handleBackTicks}>Convert to Code</button>
     </div>
     <div className="container" my-3 style={{color :props.mode === 'light'?'black':'white'}}>
         <h1>Your Text summary</h1>
